@@ -10,5 +10,5 @@ data class CourseDTO(
     @get:NotBlank(message = "courseDTO.category must not be blank")
     val category: String,
     @get:NotNull(message = "courseDTO.instructorId must not be null")
-    val instructorId : Int? = null,
+    var instructorId : Int? = null,
 )
