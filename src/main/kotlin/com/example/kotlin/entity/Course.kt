@@ -3,7 +3,7 @@ package com.example.kotlin.entity
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "Courses")
+@Table(name = "COURSES")
 data class Course(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
