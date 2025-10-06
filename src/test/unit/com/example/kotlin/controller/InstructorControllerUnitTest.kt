@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @WebMvcTest(InstructorController::class)
@@ -25,7 +26,6 @@ class InstructorControllerUnitTest {
     fun addInstructorTest() {
         //given
         val instructorDTO = InstructorDTO(null, "Instructor")
-
 
         every { instructorServiceMock.addNewInstructor(any()) } returns InstructorDTO(1, "Instructor")
 
@@ -44,5 +44,28 @@ class InstructorControllerUnitTest {
         Assertions.assertTrue{
             savedInstructorDTO!!.id != null
         }
+    }
+
+    @Test
+    fun addInstructor_Validation() {
+        //given
+        val instructorDTO = InstructorDTO(null, name = "")
+
+        //when
+        val response = webTestClient
+            .post()
+            .uri("/v1/instructors")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(instructorDTO)
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        println("response : $response")
+        Assertions.assertEquals(
+            "instructorDTO.name must not be blank", response
+        )
     }
 }
