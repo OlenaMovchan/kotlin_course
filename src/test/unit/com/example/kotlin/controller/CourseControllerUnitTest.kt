@@ -30,7 +30,7 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse() {
         //given
-        val courseDTO = courseDTO()
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Dilip Sundarraj", 1)
 
         every { courseServiceMock.addCourse(any()) } returns courseDTO(id=1)
 
@@ -55,7 +55,7 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse_validation() {
         //given
-        val courseDTO = courseDTO(name = "", category = "")
+        val courseDTO = CourseDTO(null, "","", 1)
 
         every { courseServiceMock.addCourse(any()) } returns courseDTO(id=1)
 
@@ -78,7 +78,7 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse_runtime_exception() {
         //given
-        val courseDTO = courseDTO()
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin", "Dilip Sundarraj", 1)
         val errorMessage = "Unexpected Error Occurred!"
         every { courseServiceMock.addCourse(any()) } throws RuntimeException(errorMessage)
 
@@ -99,32 +99,35 @@ class CourseControllerUnitTest {
     }
 
 
-//    @Test
-//    fun retrieveAllCourses() {
-//
-//        every { courseServiceMock.retrieveAllCourses() }.returnsMany(
-//            listOf(
-//                courseDTO(id=1),
-//                courseDTO(id=2,
-//                    "Build Reactive Microservices using Spring WebFlux/SpringBoot")
-//            )
-//        )
-//
-//
-//        val courseDTOs = webTestClient
-//            .get()
-//            .uri("/v1/courses")
-//            .exchange()
-//            .expectStatus().isOk
-//            .expectBodyList(CourseDTO::class.java)
-//            .returnResult()
-//            .responseBody
-//
-//        println("courseDTOs : $courseDTOs")
-//
-//        Assertions.assertEquals(2, courseDTOs!!.size)
-//
-//    }
+    @Test
+    fun retrieveAllCourses() {
+
+        every { courseServiceMock.retrieveAllCourses(any()) }.returnsMany(
+            listOf(
+                CourseDTO(1,
+                    "Build RestFul APis using Spring Boot and Kotlin", "Development" ,
+                    1),
+                CourseDTO(2,
+                    "Build Reactive Microservices using Spring WebFlux/SpringBoot", "Development" ,
+                    1)
+            )
+        )
+
+
+        val courseDTOs = webTestClient
+            .get()
+            .uri("/v1/courses")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        println("courseDTOs : $courseDTOs")
+
+        Assertions.assertEquals(2, courseDTOs!!.size)
+
+    }
 
     @Test
     fun updateCourse() {
