@@ -2,6 +2,7 @@ package com.example.kotlin.exceptionhandler
 
 import com.example.kotlin.exception.InstructorNotValidException
 import mu.KLogging
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -16,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Component
 @ControllerAdvice
 class GlobalErrorHandler : ResponseEntityExceptionHandler() {
-    companion object : KLogging()
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun handleMethodArgumentNotValid(
         ex: MethodArgumentNotValidException,
